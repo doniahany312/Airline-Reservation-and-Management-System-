@@ -1,5 +1,9 @@
+#ifndef SYSTEM_HPP
+#define SYSTEM_HPP
+
 //this file will include
 // reservation ,Mainetnance ,payment,Reporting classes
+
 #include"../Inc/users.hpp"
 #include"../Inc/flight_management.hpp"
 class reservation
@@ -14,3 +18,4 @@ class reservation
     static void Modify();
 
 };
+#endif
