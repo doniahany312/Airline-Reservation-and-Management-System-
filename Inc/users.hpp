@@ -4,19 +4,23 @@
 // User, Admin , Passenger, Booking agent, Crew Classes
 #include <iostream>
 #include <vector>
+#include <memory>
+// #include"../Inc/flight_management.hpp"
+class AssignmentManager;
+class flight;
 
 class user
 {
 
 public:
-    int userId;
+    std::string userId;
     std::string name;
     int phoneNumber;
     std::string email;
     std::string username;
     std::string password;
     std::string userType; // bookingAgent-Passenger-Administrator
-    int getId() { return this->userId; }
+    std::string getId() { return this->userId; }
     int getPhoneNumber() { return this->phoneNumber; }
     // virtual static int login()=0;//if -1 then failed auth
     virtual void displayMenu() = 0;
@@ -33,20 +37,27 @@ private:
 
 public:
     static std::vector<administrator> admins;
-    administrator(const std::string &username, const std::string &password, std::string name = "")
+    administrator(const std::string &username, const std::string &password, std::string name ,const std::string& id)
     {
         this->username = username;
         this->password = password;
         this->userType = "admin";
         this->name = name;
-        this->userId = adminId++;
+        this->userId = id;
+    }
+    administrator(const std::string &username, const std::string &password, std::string name )
+    {
+        this->username = username;
+        this->password = password;
+        this->userType = "admin";
+        this->name = name;
+        this->userId = "AD"+std::to_string(adminId++);
     }
     // FLIGHT OPS*  make the crew assigment in the flight ops
     //  void crewAssigment();//arguments are todo (flightid,crewid)
     void manageUsers();
-    void aircraftManage();
     void generateReports();
-    static int login();
+    static std::string login();
     void displayMenu() override;
 };
 
@@ -58,20 +69,28 @@ private:
 
 public:
     static std::vector<bookingAgent> bookingAgents;
-    bookingAgent(const std::string &username, const std::string &password, const std::string &name = "")
+    bookingAgent(const std::string &username, const std::string &password, const std::string &name ,const std::string& id)
     {
         this->username = username;
         this->password = password;
         this->userType = "booking agent";
         this->name = name;
-        this->userId = bookingAgentId++;
+        this->userId = id;
     }
-    void searchFlights(); // couts all available flights
+    bookingAgent(const std::string &username, const std::string &password, const std::string &name )
+    {
+        this->username = username;
+        this->password = password;
+        this->userType = "booking agent";
+        this->name = name;
+        this->userId = "BA"+ std::to_string(bookingAgentId++);
+    }
+    // void searchFlights(); // couts all available flights
     void bookFlight();
     void modifyReservation();
     void cancelReservation();
     void airportCheckin();
-    static int login();
+    static std::string login();
     void displayMenu() override;
 };
 
@@ -79,31 +98,88 @@ class passenger : public user
 {
 private:
 static int passengerId;
+    void bookFlight();
 public:
     static std::vector<passenger> passengers;
     std::vector<std::string> history;
     std::string preferences;
     
-    passenger(const std::string &username,const std::string&password,const std::string &name="")
+    passenger(const std::string &username,const std::string&password,const std::string &name,const std::string& id)
     {
         this->username = username;
         this->password = password;
         this->userType = "booking agent";
         this->name = name;
-        this->userId = passengerId++;
+        this->userId = id;
     }
+    passenger(const std::string &username,const std::string&password,const std::string &name)
+    {
+        this->username = username;
+        this->password = password;
+        this->userType = "booking agent";
+        this->name = name;
+        this->userId = "P" + std::to_string(passengerId++);
+    }
+    static std::string login();
     void onlineCheckin();
-    void searchFlight();
     void viewHistory();
-    static int login();
     void displayMenu() override;
 };
 
-// class crew:public user
-// {
-//     public:
-//     int crewID;
-//     //
-// }
+class crewMember
+{
+    public:
+    std::string name;
+    std::string crewID;
+    int maxFlightHours;
+    int workedHours;
+    bool available;
+    //availability //vector of flighst assigned dates & times
+    crewMember(std::string name,std::string id,int hours)
+    {
+        this->name=name;
+        this->crewID=id;
+        this->maxFlightHours=hours;
+        this->workedHours=0;
+        this->available=true;
+    }
+};
+class pilot : public crewMember
+{
+private:
+public:
+static std::vector<pilot> pilots;
+    pilot(std::string name, std::string id) : crewMember(name, id, 70)
+    {
+        // pilots.emplace_back(this);
+    }
+friend class AssignmentManager;
+};
+class flightAttendant : public crewMember
+{
+private:
+public:
+static std::vector<flightAttendant> flightAttendants;
+    flightAttendant(std::string name, std::string id) : crewMember(name, id, 50)
+    {
+        // flightAttendants.emplace_back(this);
+    }
+friend class AssignmentManager;
+};
 
+class AssignmentManager
+{
+private:
+    static std::vector<std::pair<std::shared_ptr<flight>, std::shared_ptr<crewMember>>> assignments;
+
+public:
+static void crewAssignment(flight &flight_ref);
+    static void assign(crewMember &cm, flight &fl);
+
+    static std::vector<std::shared_ptr<crewMember>> getCrewForFlight(const std::shared_ptr<flight> fl);
+
+    static std::vector<std::shared_ptr<flight>> getFlightsForCrew(const std::shared_ptr<crewMember> cm);
+
+    // friend flightManagement;
+};
 #endif
