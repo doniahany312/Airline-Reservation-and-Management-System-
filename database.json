@@ -1,0 +1,85 @@
+{
+    "admins": [
+        {
+            "id": "AD0",
+            "name": "Admin Name",
+            "password": "cd1415b16f2e6c7d",
+            "username": "admin0"
+        },
+        {
+            "id": "AD1",
+            "name": "John Doe",
+            "password": "d3102553ee2d5210",
+            "username": "admin1"
+        }
+    ],
+    "aircrafts": [
+        {
+            "availability": true,
+            "seatsNo": 200,
+            "type": "Boeing 737"
+        },
+        {
+            "availability": true,
+            "seatsNo": 180,
+            "type": "Airbus A320"
+        }
+    ],
+    "bookingAgents": [
+        {
+            "id": "BA0",
+            "name": "agentNo0",
+            "password": "cd1415b16f2e6c7d",
+            "username": "agent0"
+        },
+        {
+            "id": "BA1",
+            "name": "Jane Smith",
+            "password": "124c3fef7e2419a1",
+            "username": "agent1"
+        }
+    ],
+    "flights": [
+        {
+            "aircraftType": "Boeing 737",
+            "arrival": "2023-12-15 11:45",
+            "departure": "2023-12-15 08:30",
+            "destination": "Los Angeles (LAX)",
+            "flightNo": "AA123",
+            "origin": "New York (JFK)",
+            "status": "Scheduled"
+        },
+        {
+            "aircraftType": "Airbus A320",
+            "arrival": "2023-12-20 13:30",
+            "departure": "2023-12-20 09:00",
+            "destination": "Miami (MIA)",
+            "flightNo": "BA456",
+            "origin": "Chicago (ORD)",
+            "status": "Scheduled"
+        },
+        {
+            "aircraftType": "Boeing 737",
+            "arrival": "2024-12-16 02:30",
+            "departure": "2024-12-15 11:50",
+            "destination": "New York (JFK)",
+            "flightNo": "AA124",
+            "origin": "Chicago (ORD)",
+            "status": "Schedule"
+        }
+    ],
+    "passengers": [
+        {
+            "id": "P456",
+            "name": "PassengerNo0",
+            "password": "cd1415b16f2e6c7d",
+            "username": "passenger0"
+        },
+        {
+            "id": "P1",
+            "name": "Alice Brown",
+            "password": "0921c266d7f80f2d",
+            "username": "passenger1"
+        }
+    ]
+}

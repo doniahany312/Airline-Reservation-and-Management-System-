@@ -124,7 +124,7 @@ void administrator::createUser(char type)
         admins.emplace_back(username, PasswordHasher::hash(password), name);
         std::cout << "--- Administrator Created ---" << std::endl;
         std::cout << "Administrator ID: " << admins.back().userId << std::endl;
-        Reporting::report("Administrator Created with ID:"+admins.back().userId);
+        Reporting::report("Administrator Created with ID: "+admins.back().userId);
         break;
     case 1: // booking agent
         /* code */
@@ -132,7 +132,7 @@ void administrator::createUser(char type)
         bookingAgent::bookingAgents.emplace_back(username, PasswordHasher::hash(password), name);
         std::cout << "--- Booking Agent Created ---" << std::endl;
         std::cout << "Booking Agent ID: " << bookingAgent::bookingAgents.back().userId << std::endl;
-        Reporting::report("Booking Agent Created with ID:"+bookingAgent::bookingAgents.back().userId );
+        Reporting::report("Booking Agent Created with ID: "+bookingAgent::bookingAgents.back().userId );
         break;
     case 2: // passenger
         /* code */
@@ -140,7 +140,7 @@ void administrator::createUser(char type)
         passenger::passengers.emplace_back(username, PasswordHasher::hash(password), name);
         std::cout << "--- Passenger Created ---" << std::endl;
         std::cout << "Passenger ID: " << passenger::passengers.back().userId << std::endl;
-        Reporting::report("Passenger Created with ID:"+passenger::passengers.back().userId);
+        Reporting::report("Passenger Created with ID: "+passenger::passengers.back().userId);
         break;
     default:
         break;
@@ -214,7 +214,7 @@ void administrator::updateUser(char type)
         std::getline(std::cin, input);
         // Update logic for name
         user_ptr->name = input;
-        Reporting::report(user_ptr->userType+" with ID "+user_ptr->userId+" got the name updated");
+        Reporting::report(user_ptr->userType+" with ID: "+user_ptr->userId+" got the name updated");
         break;
     case 2:
         std::cout << "Enter new phone number: ";
@@ -222,7 +222,7 @@ void administrator::updateUser(char type)
         std::getline(std::cin, input);
         // Update logic for phone number
         user_ptr->phoneNumber = std::stoi(input);
-        Reporting::report(user_ptr->userType+" with ID "+user_ptr->userId+" got the phone number updated");
+        Reporting::report(user_ptr->userType+" with ID: "+user_ptr->userId+" got the phone number updated");
         break;
     case 3:
         std::cout << "Enter new email: ";
@@ -230,7 +230,7 @@ void administrator::updateUser(char type)
         std::getline(std::cin, input);
         // Update logic for email
         user_ptr->email = input;
-        Reporting::report(user_ptr->userType+" with ID "+user_ptr->userId+" got the mail updated");
+        Reporting::report(user_ptr->userType+" with ID: "+user_ptr->userId+" got the mail updated");
         break;
     case 4:
         std::cout << "Enter new username: ";
@@ -238,7 +238,7 @@ void administrator::updateUser(char type)
         std::getline(std::cin, input);
         // Update logic for username
         user_ptr->username = input;
-        Reporting::report(user_ptr->userType+" with ID "+user_ptr->userId+" got the username updated");
+        Reporting::report(user_ptr->userType+" with ID: "+user_ptr->userId+" got the username updated");
         break;
     case 5:
         std::cout << "Enter new password: ";
@@ -246,7 +246,7 @@ void administrator::updateUser(char type)
         std::getline(std::cin, input);
         // Update logic for password
         user_ptr->password = PasswordHasher::hash(input);
-        Reporting::report(user_ptr->userType+" with ID "+user_ptr->userId+" got the password updated");
+        Reporting::report(user_ptr->userType+" with ID: "+user_ptr->userId+" got the password updated");
         break;
     case 6:
         return;
@@ -291,7 +291,7 @@ void administrator::deleteUser(char type) // to be tested
 
     if (it != userList.end())
     {
-        Reporting::report((*it).userType+" with ID "+(*it).userId+" got deleted");
+        Reporting::report((*it).userType+" with ID: "+(*it).userId+" got deleted");
         admins.erase(it);
         std::cout << "User deleted successfully!" << std::endl;
 
@@ -371,14 +371,14 @@ void passenger::bookFlight()
             int reservationId = std::stoi(result); // Convert the remaining string to an integer
             auto &reservation = reservation::getReservation(reservationId);
             auto &flight = flightManagement::getFlight(reservation.reservedFlight.get()->flightNo);
-            Reporting::report("Passenger with ID"+reservation.owner.get()->userId+" reserved flight with number: "+flight.flightNo);
+            Reporting::report("Passenger with ID: "+reservation.owner.get()->userId+" reserved flight with number: "+flight.flightNo);
             std::cout << "Booking Successful!" << std::endl;
             std::cout << "Reservation ID: " << "R" << reservationId << std::endl;
             std::cout << "Passenger: " << reservation.owner.get()->name << std::endl;
             std::cout << "Flight: " << flight.flightNo << " from " << flight.origin << " to " << flight.destination << std::endl;
             std::cout << "Seat: " << reservation.seat << std::endl;
             std::cout << "Total Cost: $" << flight.seatPrice << std::endl; // maybe wrong
-            std::cout << "Payment Method: " << reservation.paymentMethod.type << std::endl;
+            std::cout << "Payment Method: " << reservation.paymentMethod.type << std::endl<<std::endl;
             // Proceed with reservationId
         }
         catch (const std::invalid_argument &e)
@@ -500,14 +500,14 @@ void bookingAgent::bookFlight()
             int reservationId = std::stoi(result); // Convert the remaining string to an integer
             auto &reservation = reservation::getReservation(reservationId);
             auto &flight = flightManagement::getFlight(reservation.reservedFlight.get()->flightNo);
-            Reporting::report("Booking agent with ID:"+userId+"Booked flight: "+flight.flightNo+" for Passenger with ID"+reservation.owner.get()->userId);
-            std::cout << "Booking Successful!" << std::endl;
-            std::cout << "Reservation ID: " << "R" << reservationId << std::endl;
+            Reporting::report("Booking agent with ID: "+userId+" Booked flight: "+flight.flightNo+" for Passenger with ID: "+reservation.owner.get()->userId);
+            std::cout << std::endl<< "Booking Successful!" << std::endl;
+            std::cout <<std::endl<< "Reservation ID: " << "R" << reservationId << std::endl;
             std::cout << "Passenger: " << reservation.owner.get()->name << std::endl;
             std::cout << "Flight: " << flight.flightNo << " from " << flight.origin << " to " << flight.destination << std::endl;
             std::cout << "Seat: " << reservation.seat << std::endl;
             std::cout << "Total Cost: $" << flight.seatPrice << std::endl; // maybe wrong
-            std::cout << "Payment Method: " << reservation.paymentMethod.type << std::endl;
+            std::cout << "Payment Method: " << reservation.paymentMethod.type << std::endl<<std::endl;
             // Proceed with reservationId
         }
         catch (const std::invalid_argument &e)
@@ -617,7 +617,7 @@ void bookingAgent::modifyReservation()
 
             reservedFlight.seatmap[seatNumber] = 1; // not available
             std::cout << "New seat is booked" << std::endl;
-            Reporting::report("Booking agent modified Reservation with ID: R"+std::to_string(resvv.id)+" to be of seat:" + seatNumber);
+            Reporting::report("Booking agent modified Reservation with ID: R"+std::to_string(resvv.id)+" to be of seat: " + seatNumber);
             std::cout << "Reservation is sucessfully modified!! " << std::endl;
         }
         else
@@ -639,17 +639,13 @@ std::string administrator::login()
     std::cout << "Password:";
     std::getline(std::cin, pass);
 
-    std::cout << "username entered:" << username << "  password entered: " << pass
-              << " password hashed: " << PasswordHasher::hash(pass) << std::endl;
-
     for (auto admin : admins)
     {
 
-        std::cout << " username: " << admin.username << " password: " << admin.password << std::endl;
         if (admin.username == username && admin.password == PasswordHasher::hash(pass))
         {
-            std::cout << "match found" << std::endl;
-            std::cout << "user's id: " << admin.userId << std::endl;
+            // std::cout << "match found" << std::endl;
+            // std::cout << "user's id: " << admin.userId << std::endl;
             id = admin.userId;
             break;
         }
@@ -667,15 +663,13 @@ std::string bookingAgent::login()
     std::getline(std::cin, username);
     std::cout << "Password:";
     std::getline(std::cin, pass);
-    std::cout << "username entered:" << username << "  password entered: " << pass
-              << "password hashed: " << PasswordHasher::hash(pass) << std::endl;
+
     for (auto bookingAgent : bookingAgents)
     {
-        std::cout << " username: " << bookingAgent.username << " password: " << bookingAgent.password << std::endl;
         if (bookingAgent.username == username && bookingAgent.password == PasswordHasher::hash(pass))
         {
-            std::cout << "match found" << std::endl;
-            std::cout << "user's id: " << bookingAgent.userId << std::endl;
+            // std::cout << "match found" << std::endl;
+            // std::cout << "user's id: " << bookingAgent.userId << std::endl;
             id = bookingAgent.userId;
             break;
         }
@@ -693,15 +687,13 @@ std::string passenger::login()
     std::getline(std::cin, username);
     std::cout << "Password:";
     std::getline(std::cin, pass);
-    std::cout << "username entered:" << username << "  password entered: " << pass
-              << "password hashed: " << PasswordHasher::hash(pass) << std::endl;
+
     for (auto passenger : passengers)
     {
-        std::cout << " username: " << passenger.username << " password: " << passenger.password << std::endl;
         if (passenger.username == username && passenger.password == PasswordHasher::hash(pass))
         {
-            std::cout << "match found" << std::endl;
-            std::cout << "user's id: " << passenger.userId << std::endl;
+            // std::cout << "match found" << std::endl;
+            // std::cout << "user's id: " << passenger.userId << std::endl;
             id = passenger.userId;
             break;
         }

@@ -24,7 +24,7 @@ class payment
     std::string type;
     payment();
     payment(std::string from,int amount,std::string type):from(from),amount(amount),type(type){}
-
+    
 };
 class reservation
 {

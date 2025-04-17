@@ -2,6 +2,7 @@
 #include "../Inc/flight_management.hpp"
 #include "../Inc/system.hpp"
 #include "../Inc/users.hpp"
+#include "../Inc/database.hpp"
 #include <limits>
 #include <algorithm>
 
@@ -11,6 +12,8 @@ int main()
 	std::string id="initialized";
 	int x;
 	bool wrongChoice = true;
+	    // Load data from JSON file
+		Database::fetchData();
     while (wrongChoice)
     {
 	
@@ -69,11 +72,13 @@ int main()
 			Reporting::report(user_ptr->userType+" with ID: "+user_ptr->userId+" Logged in succesfully");
 			user_ptr->displayMenu();
 			Reporting::report(user_ptr->userType+" with ID: "+user_ptr->userId+" Logged out succesfully");
-
+    // Save data back to JSON file
+    Database::saveData();
 		}
 		else if (id.empty())
 		{
 			std::cout << "Logging in failed" << std::endl;
 		}
 	}
+
 }

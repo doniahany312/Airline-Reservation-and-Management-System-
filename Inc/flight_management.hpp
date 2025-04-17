@@ -17,6 +17,7 @@ class crewMember;
 class flightManagement;
 class flight; 
 class maintenance;
+class Database;
 
 class aircraft
 {
@@ -31,9 +32,15 @@ public:
     maintenance aircraftMaintenance;
     bool availability;
     aircraft(std::string type, int no, maintenance m) : type(type), seatsNo(no), aircraftMaintenance(m), availability(true) {}
+        // Constructor
+    aircraft(const std::string& type, int seatsNo, const maintenance& m, bool availability)
+        : type(type), seatsNo(seatsNo), aircraftMaintenance(m), availability(availability) {}
+
     // availability? should it be vector of time stamps from-to?
     friend flightManagement;
+    friend Database;
 };
+
 class flight
 { // stuff here should be private
 private:
@@ -49,8 +56,8 @@ public:
     std::map<std::string, int> seatmap; //12A available or not (0 available 1 not available)
     int availableSeatsNo;
     int seatPrice;
-    flight() {}
-    flight(std::string number, std::string org, std::string dst, time_t x, time_t y, std::string status, std::shared_ptr<aircraft> craft) : flightNo(number), origin(org), destination(dst), departure(x), arrival(y), status(status), craft(craft) {initSeats();}
+    flight(int seatprice=150):seatPrice(seatprice) {}
+    flight(std::string number, std::string org, std::string dst, time_t x, time_t y, std::string status, std::shared_ptr<aircraft> craft, int seatPrice = 150) : flightNo(number), origin(org), destination(dst), departure(x), arrival(y), status(status), craft(craft) ,seatPrice(seatPrice) {initSeats();}
     void print() const;
 };
 
@@ -73,6 +80,8 @@ public:
     static std::unordered_set<std::string> getAvailableSeats(const std::string &flightNo);
     static void displayAdministratorMenu();
     static void ManageAircraft();
+
+    friend Database;
 };
 
 

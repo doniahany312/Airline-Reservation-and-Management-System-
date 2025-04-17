@@ -2,47 +2,9 @@
 #include <algorithm> // For std::find_if
 #include <limits>    // For std::numeric_limits
 // std::vector<flight> flightManagement::flights;
-std::vector<aircraft> aircraft::aircrafts = {aircraft("Boeing 737", 190, maintenance()), aircraft("Airbus A320", 50, maintenance())};
+std::vector<aircraft> aircraft::aircrafts = {};
 std::vector<std::pair<std::shared_ptr<flight>, std::shared_ptr<crewMember>>> AssignmentManager::assignments = {};
-std::vector<flight> flightManagement::flights = {
-    flight{
-        "AA123",             // Flight Number
-        "New York (JFK)",    // Origin
-        "Los Angeles (LAX)", // Destination
-        []
-        {
-            std::tm departureTm = {};
-            std::istringstream("2023-12-15 08:30") >> std::get_time(&departureTm, "%Y-%m-%d %H:%M");
-            return std::mktime(&departureTm); // Return time_t instead of address
-        }(),                                  // Departure Date and Time
-        []
-        {
-            std::tm arrivalTm = {};
-            std::istringstream("2023-12-15 11:45") >> std::get_time(&arrivalTm, "%Y-%m-%d %H:%M");
-            return std::mktime(&arrivalTm);                // Return time_t instead of address
-        }(),                                               // Arrival Date and Time
-        "Scheduled",                                       // Status
-        std::make_shared<aircraft>(aircraft::aircrafts[0]) // Aircraft
-    },
-    flight{
-        "BA456",         // Flight Number
-        "Chicago (ORD)", // Origin
-        "Miami (MIA)",   // Destination
-        []
-        {
-            std::tm departureTm = {};
-            std::istringstream("2023-12-20 09:00") >> std::get_time(&departureTm, "%Y-%m-%d %H:%M");
-            return std::mktime(&departureTm); // Return time_t instead of address
-        }(),                                  // Departure Date and Time
-        []
-        {
-            std::tm arrivalTm = {};
-            std::istringstream("2023-12-20 13:30") >> std::get_time(&arrivalTm, "%Y-%m-%d %H:%M");
-            return std::mktime(&arrivalTm);                // Return time_t instead of address
-        }(),                                               // Arrival Date and Time
-        "Scheduled",                                       // Status
-        std::make_shared<aircraft>(aircraft::aircrafts[1]) // Aircraft
-    }};
+std::vector<flight> flightManagement::flights = {};
 
     void flightManagement::displayAdministratorMenu()
     {
@@ -73,6 +35,7 @@ std::vector<flight> flightManagement::flights = {
                 for (auto flight : flights)
                 {
                     flight.print();
+                    std::cout<<std::endl;
                 }
                 break;
             case 5:
@@ -417,12 +380,12 @@ void flightManagement::ManageAircraft()
         std::cout << "Enter Updated Size:";
         std::cin >> size;
         it->seatsNo = size;
-        Reporting::report("Aircraft of type:"+(*it).type + "Updated with new size"+std::to_string((*it).seatsNo));
+        Reporting::report("Aircraft of type: "+(*it).type + " Updated with new size "+std::to_string((*it).seatsNo));
         std::cout << "Aircraft Updated Succesfully!!" << std::endl;
         break;
     case 3:
         aircraft::aircrafts.erase(it);
-        Reporting::report("Aircraft of type:"+(*it).type + "got deleted");
+        Reporting::report("Aircraft of type: "+(*it).type + " got deleted");
         std::cout << "Aircraft Deleted Sucessfully!!" << std::endl;
         break;
 
@@ -473,7 +436,7 @@ std::vector<flight> flightManagement::searchFlights()
             matchingFlights.push_back(f);
         }
     }
-    std::cout << "Available Flights:" << std::endl;
+    std::cout <<std::endl<< "Available Flights:" <<std::endl << std::endl;
     if (matchingFlights.empty())
     {
     }
@@ -518,6 +481,7 @@ void flight::print() const
 void flight::initSeats()
 {
     this->availableSeatsNo=craft.get()->seatsNo;
+    this->seatmap.clear(); // Clear the seatmap before initializing
     for(int i=0;i<this->craft.get()->seatsNo;i=i+4)
     {
         this->seatmap.emplace(std::to_string(i/4) + "A", 0);
