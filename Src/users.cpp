@@ -1,7 +1,7 @@
 #include "../Inc/users.hpp"
 #include "../Inc/flight_management.hpp"
 #include "../Inc/database.hpp"
-#include"../Inc/system.hpp"
+#include "../Inc/system.hpp"
 
 // Include <algorithm> for std::find_if
 #include <algorithm>
@@ -15,11 +15,10 @@ int administrator::adminId = 0;
 // Define static vectors
 // admin0 - 0000
 std::vector<administrator> administrator::admins = {administrator(std::string("admin0"), "cd1415b16f2e6c7d", std::string("Admin Name"))};
-std::vector<bookingAgent> bookingAgent::bookingAgents = {bookingAgent(std::string("agent0"),"cd1415b16f2e6c7d",std::string("agentNo0"))};
-std::vector<passenger> passenger::passengers = {passenger("passenger0","cd1415b16f2e6c7d","PassengerNo0","P456")};
+std::vector<bookingAgent> bookingAgent::bookingAgents = {bookingAgent(std::string("agent0"), "cd1415b16f2e6c7d", std::string("agentNo0"))};
+std::vector<passenger> passenger::passengers = {passenger("passenger0", "cd1415b16f2e6c7d", "PassengerNo0", "P456")};
 std::vector<pilot> pilot::pilots = {pilot("Sarah Connor", "PL001"), pilot("James Kirk", "PL002")};
 std::vector<flightAttendant> flightAttendant::flightAttendants = {flightAttendant("Emma Watson", "FA001"), flightAttendant("John Cena", "FA002")};
-
 void administrator::displayMenu()
 {
     int x;
@@ -53,6 +52,7 @@ void administrator::displayMenu()
             manageUsers();
             break;
         case 4: // generate reports
+            Reporting::generateReport();                                                
             break;
         case 5: // logout
             wrongChoice = false;
@@ -65,6 +65,7 @@ void administrator::displayMenu()
         }
     }
 }
+
 
 void administrator::manageUsers()
 {
@@ -122,22 +123,24 @@ void administrator::createUser(char type)
         std::cout << "--- Creating Administrator ---" << std::endl;
         admins.emplace_back(username, PasswordHasher::hash(password), name);
         std::cout << "--- Administrator Created ---" << std::endl;
-        std::cout<<"Administrator ID: "<<admins.back().userId<<std::endl;
+        std::cout << "Administrator ID: " << admins.back().userId << std::endl;
+        Reporting::report("Administrator Created with ID:"+admins.back().userId);
         break;
     case 1: // booking agent
         /* code */
         std::cout << "--- Creating Booking Agent ---" << std::endl;
         bookingAgent::bookingAgents.emplace_back(username, PasswordHasher::hash(password), name);
         std::cout << "--- Booking Agent Created ---" << std::endl;
-        std::cout<<"Booking Agent ID: "<<bookingAgent::bookingAgents.back().userId<<std::endl;
-
+        std::cout << "Booking Agent ID: " << bookingAgent::bookingAgents.back().userId << std::endl;
+        Reporting::report("Booking Agent Created with ID:"+bookingAgent::bookingAgents.back().userId );
         break;
     case 2: // passenger
         /* code */
         std::cout << "--- Creating Passenger ---" << std::endl;
         passenger::passengers.emplace_back(username, PasswordHasher::hash(password), name);
         std::cout << "--- Passenger Created ---" << std::endl;
-        std::cout<<"Passenger ID: "<<passenger::passengers.back().userId<<std::endl;
+        std::cout << "Passenger ID: " << passenger::passengers.back().userId << std::endl;
+        Reporting::report("Passenger Created with ID:"+passenger::passengers.back().userId);
         break;
     default:
         break;
@@ -151,7 +154,7 @@ void administrator::updateUser(char type)
     std::string input;
     user *user_ptr;
     std::cout << "Enter user's ID";
-std::getline(std::cin,id);
+    std::getline(std::cin, id);
     auto &userList = admins;
     // Use a pointer to handle incompatible types
     if (type == 0)
@@ -211,6 +214,7 @@ std::getline(std::cin,id);
         std::getline(std::cin, input);
         // Update logic for name
         user_ptr->name = input;
+        Reporting::report(user_ptr->userType+" with ID "+user_ptr->userId+" got the name updated");
         break;
     case 2:
         std::cout << "Enter new phone number: ";
@@ -218,6 +222,7 @@ std::getline(std::cin,id);
         std::getline(std::cin, input);
         // Update logic for phone number
         user_ptr->phoneNumber = std::stoi(input);
+        Reporting::report(user_ptr->userType+" with ID "+user_ptr->userId+" got the phone number updated");
         break;
     case 3:
         std::cout << "Enter new email: ";
@@ -225,6 +230,7 @@ std::getline(std::cin,id);
         std::getline(std::cin, input);
         // Update logic for email
         user_ptr->email = input;
+        Reporting::report(user_ptr->userType+" with ID "+user_ptr->userId+" got the mail updated");
         break;
     case 4:
         std::cout << "Enter new username: ";
@@ -232,6 +238,7 @@ std::getline(std::cin,id);
         std::getline(std::cin, input);
         // Update logic for username
         user_ptr->username = input;
+        Reporting::report(user_ptr->userType+" with ID "+user_ptr->userId+" got the username updated");
         break;
     case 5:
         std::cout << "Enter new password: ";
@@ -239,6 +246,7 @@ std::getline(std::cin,id);
         std::getline(std::cin, input);
         // Update logic for password
         user_ptr->password = PasswordHasher::hash(input);
+        Reporting::report(user_ptr->userType+" with ID "+user_ptr->userId+" got the password updated");
         break;
     case 6:
         return;
@@ -251,7 +259,7 @@ void administrator::deleteUser(char type) // to be tested
 {                                         // problem here is that the ids are incremented by objects and accessed by it
     std::string id;
     std::cout << "Enter user's ID";
-    std::getline(std::cin,id);
+    std::getline(std::cin, id);
     auto &userList = admins;
     // Use a pointer to handle incompatible types
     if (type == 0)
@@ -283,8 +291,10 @@ void administrator::deleteUser(char type) // to be tested
 
     if (it != userList.end())
     {
+        Reporting::report((*it).userType+" with ID "+(*it).userId+" got deleted");
         admins.erase(it);
         std::cout << "User deleted successfully!" << std::endl;
+
     }
     else
     {
@@ -298,8 +308,6 @@ void administrator::deleteUser(char type) // to be tested
     // }
     // adminId--;
 }
-
-
 
 void passenger::displayMenu()
 {
@@ -315,7 +323,7 @@ void passenger::displayMenu()
         std::cin >> x;
         if (std::cin.fail())
         {
-            std::cin.clear(); // Clear the fail state
+            std::cin.clear();                                                   // Clear the fail state
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
             std::cout << "Invalid input! Please enter a number." << std::endl;
             continue; // Restart the loop
@@ -326,10 +334,13 @@ void passenger::displayMenu()
             /* code */
             std::cout << "REACHED HERE CORRECTLY" << std::endl;
             flightManagement::searchFlights();
+            bookFlight();
             break;
         case 2:
+        viewHistory();
             break;
         case 3:
+            
             break;
         case 4: // logout
             wrongChoice = false;
@@ -342,8 +353,75 @@ void passenger::displayMenu()
         }
     }
 }
+void passenger::bookFlight()
+{
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
 
+    // std::shared_ptr<passenger> passengerPtr(&(*this), [](passenger*) {
+    //     // Custom deleter does nothing
+    // });
+    std::string result = reservation::add(this->userId);
 
+    // std::cout<<"result: "<<result;
+    if ("Failed" != result)
+    {
+        result.erase(0, 1); // Remove the first letter from the string
+        try
+        {
+            int reservationId = std::stoi(result); // Convert the remaining string to an integer
+            auto &reservation = reservation::getReservation(reservationId);
+            auto &flight = flightManagement::getFlight(reservation.reservedFlight.get()->flightNo);
+            Reporting::report("Passenger with ID"+reservation.owner.get()->userId+" reserved flight with number: "+flight.flightNo);
+            std::cout << "Booking Successful!" << std::endl;
+            std::cout << "Reservation ID: " << "R" << reservationId << std::endl;
+            std::cout << "Passenger: " << reservation.owner.get()->name << std::endl;
+            std::cout << "Flight: " << flight.flightNo << " from " << flight.origin << " to " << flight.destination << std::endl;
+            std::cout << "Seat: " << reservation.seat << std::endl;
+            std::cout << "Total Cost: $" << flight.seatPrice << std::endl; // maybe wrong
+            std::cout << "Payment Method: " << reservation.paymentMethod.type << std::endl;
+            // Proceed with reservationId
+        }
+        catch (const std::invalid_argument &e)
+        {
+            std::cerr << "Error: Invalid reservation ID format!" << std::endl;
+            return;
+        }
+        catch (const std::out_of_range &e)
+        {
+            std::cerr << "Error: Reservation ID is out of range!" << std::endl;
+            return;
+        }
+    }
+}
+
+void passenger::viewHistory()
+{
+    std::cout<<"--- My Reservations ---"<<std::endl;
+    std::cout<<"Fetching reservations for Passenger "<<this->name<<"..."<<std::endl<<std::endl;
+    auto myReservations=reservation::getHistory(history);
+    
+
+    
+    for(int count=0;count<myReservations.size();count++)
+    {
+        auto timeToString = [](time_t time) -> std::string
+        {
+            char buffer[20];
+            std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M", std::localtime(&time));
+            return std::string(buffer);
+        };
+        flight reservedFlight = *(myReservations[count].reservedFlight.get());
+        std::cout<<count+1<<". Reservation ID: R"<<myReservations[count].id<<std::endl;
+
+        std::cout << "   Flight: " << reservedFlight.flightNo << " from " << reservedFlight.origin
+              << " to " << reservedFlight.destination << std::endl
+              << "   Departure: " << timeToString(reservedFlight.departure) << std::endl;
+        std::cout <<"   Seat: "<<myReservations[count].seat<<std::endl
+                 <<"   Status: "<<myReservations[count].status<<std::endl<<std::endl;
+
+    }
+
+}
 void bookingAgent::displayMenu()
 {
     int x;
@@ -359,7 +437,7 @@ void bookingAgent::displayMenu()
         std::cin >> x;
         if (std::cin.fail())
         {
-            std::cin.clear(); // Clear the fail state
+            std::cin.clear();                                                   // Clear the fail state
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
             std::cout << "Invalid input! Please enter a number." << std::endl;
             continue; // Restart the loop
@@ -367,31 +445,30 @@ void bookingAgent::displayMenu()
         switch (x)
         {
         case 1:
-            /* code */
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+            /* code */ // no cin.ignore is intended
             flightManagement::searchFlights();
             // bookFlight();??
             // enter no of flights & reserve for this object of a booking agent
             break;
         case 2:
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
-        bookFlight();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+            bookFlight();
             break;
         case 3:
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
-        modifyReservation();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+            modifyReservation();
             break;
         case 4:
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
-        cancelReservation();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+            cancelReservation();
             break;
-        case 5: // logout
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+        case 5:                                                                 // logout
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
             wrongChoice = false;
             std::cout << "Logged out successfully!" << std::endl;
             return;
         default:
-        std::cin.ignore(); // Discard invalid input
+            std::cin.ignore(); // Discard invalid input
             wrongChoice = true;
             std::cout << "Invalid choice! Please try again." << std::endl;
             break;
@@ -401,7 +478,7 @@ void bookingAgent::displayMenu()
 
 void bookingAgent::bookFlight()
 {
-    std::string flightNo, seatNo, passengerId;
+    std::string passengerId;
     std::cout << "--- Book a Flight ---" << std::endl;
     std::cout << "Enter Passenger ID: ";
     std::getline(std::cin, passengerId);
@@ -413,152 +490,143 @@ void bookingAgent::bookFlight()
         return;
     }
 
-    std::cout << "Enter the Flight Number: ";
-    std::getline(std::cin, flightNo);
-    auto seats = flightManagement::getAvailableSeats(flightNo);
-    if (seats.empty())
-    {
-        std::cout << "Flight not found or no seats available" << std::endl;
-        return;
-    }
-    std::cout << "Enter Seat Number (e.g., 14C): ";
-    std::getline(std::cin, seatNo);
-    if (!seatNo.empty())
-    {
+    std::string result = reservation::add(passengerId);
 
-        if (seats.find(seatNo) != seats.end())
+    if ("Failed" != result)
+    {
+        result.erase(0, 1); // Remove the first letter from the string
+        try
         {
-            std::string method, details;
-            std::cout << "Seat " << seatNo << " is available." << std::endl;
-            auto& reservedFlight = flightManagement::getFlight(flightNo); // Get a reference to the original flight
-            std::shared_ptr<flight> flightPtr = std::make_shared<flight>(reservedFlight); // Use the same shared_ptr
-            std::cout << "Enter Payment Method (Credit Card/Cash/PayPal): ";
-            std::getline(std::cin, method);
-            if (method != "Credit Card" && method != "Cash" && method != "PayPal")
-            {
-                std::cout << "Invalid Payment method!" << std::endl;
-                return;
-            }
-            std::cout << "Enter Payment Details: ";
-            std::getline(std::cin, details); // wrong : no check for details
-
-            ;
-            std::shared_ptr<reservation> sptr = std::make_shared<reservation>(reservation(std::make_shared<passenger>(*passengerIt), flightPtr, payment(details, 150, method), seatNo));
-            reservation::add(sptr);
-            reservedFlight.seatmap[seatNo]=1;//not available
-            
+            int reservationId = std::stoi(result); // Convert the remaining string to an integer
+            auto &reservation = reservation::getReservation(reservationId);
+            auto &flight = flightManagement::getFlight(reservation.reservedFlight.get()->flightNo);
+            Reporting::report("Booking agent with ID:"+userId+"Booked flight: "+flight.flightNo+" for Passenger with ID"+reservation.owner.get()->userId);
             std::cout << "Booking Successful!" << std::endl;
-            std::cout << "Reservation ID: " << "R" << sptr.get()->id << std::endl;
-            std::cout << "Passenger: " << (*passengerIt).name << std::endl;
-            std::cout << "Flight: " << flightNo << " from " << reservedFlight.origin << " to " << reservedFlight.destination << std::endl;
-            std::cout << "Seat: " << seatNo << std::endl;
-            std::cout << "Total Cost: $" <<reservedFlight.seatPrice<< std::endl; // maybe wrong
-            std::cout << "Payment Method: " << method << std::endl;
+            std::cout << "Reservation ID: " << "R" << reservationId << std::endl;
+            std::cout << "Passenger: " << reservation.owner.get()->name << std::endl;
+            std::cout << "Flight: " << flight.flightNo << " from " << flight.origin << " to " << flight.destination << std::endl;
+            std::cout << "Seat: " << reservation.seat << std::endl;
+            std::cout << "Total Cost: $" << flight.seatPrice << std::endl; // maybe wrong
+            std::cout << "Payment Method: " << reservation.paymentMethod.type << std::endl;
+            // Proceed with reservationId
         }
-        else
+        catch (const std::invalid_argument &e)
         {
-            std::cout << "Seat " << seatNo << " is not available." << std::endl;
+            std::cerr << "Error: Invalid reservation ID format!" << std::endl;
             return;
         }
-    }
-
-    else
-    {
-        std::cout << "Seat number is empty! " << std::endl;
-        return;
+        catch (const std::out_of_range &e)
+        {
+            std::cerr << "Error: Reservation ID is out of range!" << std::endl;
+            return;
+        }
     }
 }
 
 void bookingAgent::cancelReservation()
 {
-std::string resvId,confirm;
-std::cout<< "--- Cancel Reservation ---" << std::endl;
-std::cout<<"Enter Reservation ID: ";
-std::getline(std::cin,resvId);
-std::cout<<" Are you sure you want to cancel Reservation ID "<<resvId<<"?";
-std::cout<<"(yes/no): ";
-std::cin>>confirm;//yes or no
-if(confirm=="yes")
-{
-    resvId.erase(0, 1); // Remove the first letter from the string
-    try {
-        int reservationId = std::stoi(resvId); // Convert the remaining string to an integer
-        if(reservation::getReservation(reservationId).status!= "Canceled")
-        {reservation::cancel(reservationId);}
-        else{std::cout<<"Reservation is already canceled!"<<std::endl;}
-        
-        // Proceed with reservationId
-    } catch (const std::invalid_argument& e) {
-        std::cerr << "Error: Invalid reservation ID format!" << std::endl;
-        return;
-    } catch (const std::out_of_range& e) {
-        std::cerr << "Error: Reservation ID is out of range!" << std::endl;
+    std::string resvId, confirm;
+    std::cout << "--- Cancel Reservation ---" << std::endl;
+    std::cout << "Enter Reservation ID: ";
+    std::getline(std::cin, resvId);
+    std::cout << " Are you sure you want to cancel Reservation ID " << resvId << "?";
+    std::cout << "(yes/no): ";
+    std::cin >> confirm; // yes or no
+    if (confirm == "yes")
+    {
+        resvId.erase(0, 1); // Remove the first letter from the string
+        try
+        {
+            int reservationId = std::stoi(resvId); // Convert the remaining string to an integer
+            if (reservation::getReservation(reservationId).status != "Canceled")
+            {
+                Reporting::report("Booking agent canceled reservation with ID: R"+std::to_string(reservationId));
+                reservation::cancel(reservationId);
+            }
+            else
+            {
+                std::cout << "Reservation is already canceled!" << std::endl;
+            }
+
+        }
+        catch (const std::invalid_argument &e)
+        {
+            std::cerr << "Error: Invalid reservation ID format!" << std::endl;
+            return;
+        }
+        catch (const std::out_of_range &e)
+        {
+            std::cerr << "Error: Reservation ID is out of range!" << std::endl;
+            return;
+        }
+    }
+    else
+    {
+        std::cout << "Canceled the Request!" << std::endl;
         return;
     }
-}
-else 
-{
-std::cout<<"Canceled the Request!"<<std::endl;
-return;
-}
 }
 
 void bookingAgent::modifyReservation()
 {
-std::string resvId,seatNumber;
-int reservationId;
-std::cout<<"--- Modify Reservation ---"<<std::endl;
-std::cout<<"Enter Reservation ID: ";
-std::getline(std::cin,resvId);
-resvId.erase(0, 1); // Remove the first letter from the string
-    try {
+    std::string resvId, seatNumber;
+    int reservationId;
+    std::cout << "--- Modify Reservation ---" << std::endl;
+    std::cout << "Enter Reservation ID: ";
+    std::getline(std::cin, resvId);
+    resvId.erase(0, 1); // Remove the first letter from the string
+    try
+    {
         reservationId = std::stoi(resvId); // Convert the remaining string to an integer
         // Proceed with reservationId
-    } catch (const std::invalid_argument& e) {
+    }
+    catch (const std::invalid_argument &e)
+    {
         std::cerr << "Error: Invalid reservation ID format!" << std::endl;
         return;
-    } catch (const std::out_of_range& e) {
+    }
+    catch (const std::out_of_range &e)
+    {
         std::cerr << "Error: Reservation ID is out of range!" << std::endl;
         return;
     }
 
+    auto &resvv = reservation::getReservation(reservationId);
+    std::cout << "resevation returned id:" << resvv.id << std::endl;
 
-auto& resvv=reservation::getReservation(reservationId);
-std::cout<<"resevation returned id:"<<resvv.id<<std::endl;
-
-if(resvv.status=="Canceled")
-{
-    std::cout<<"Error: This Reservation is Canceled so Can't be Modified !"<<std::endl;
-    return;
-}
-auto seats=flightManagement::getAvailableSeats(resvv.reservedFlight.get()->flightNo);
-auto& reservedFlight = flightManagement::getFlight(resvv.reservedFlight.get()->flightNo);
-
-//changing the seat is the only thing you want to modify??
-std::cout<<"Modifying the seat number.."<<std::endl;
-std::cout<<"Enter the new seat:";
-std::getline(std::cin,seatNumber);
-
-if (!seatNumber.empty()) {
-  
-    if (seats.find(seatNumber) != seats.end()) //then seatNumber is available
+    if (resvv.status == "Canceled")
     {
-        // resvv.reservedFlight.get()->seatmap.at(resvv.seat)=0;//make the already reserved available
-        //reserve the new seat
-        reservedFlight.seatmap[resvv.seat]=0;// available
-        
-        reservedFlight.seatmap[seatNumber]=1;//not available
-        std::cout<<"New seat is booked"<<std::endl;
-        std::cout<<"Reservation is sucessfully modified!! "<<std::endl;
-
+        std::cout << "Error: This Reservation is Canceled so Can't be Modified !" << std::endl;
+        return;
     }
-    else
+    auto seats = flightManagement::getAvailableSeats(resvv.reservedFlight.get()->flightNo);
+    auto &reservedFlight = flightManagement::getFlight(resvv.reservedFlight.get()->flightNo);
+
+    // changing the seat is the only thing you want to modify??
+    std::cout << "Modifying the seat number.." << std::endl;
+    std::cout << "Enter the new seat:";
+    std::getline(std::cin, seatNumber);
+
+    if (!seatNumber.empty())
     {
-        std::cout<<"The entered seat is not available"<<std::endl;
-    }
 
+        if (seats.find(seatNumber) != seats.end()) // then seatNumber is available
+        {
+
+            reservedFlight.seatmap[resvv.seat] = 0; // available
+
+            reservedFlight.seatmap[seatNumber] = 1; // not available
+            std::cout << "New seat is booked" << std::endl;
+            Reporting::report("Booking agent modified Reservation with ID: R"+std::to_string(resvv.id)+" to be of seat:" + seatNumber);
+            std::cout << "Reservation is sucessfully modified!! " << std::endl;
+        }
+        else
+        {
+            std::cout << "The entered seat is not available" << std::endl;
+        }
+    }
 }
-}
+
 std::string administrator::login()
 {
     std::string username, pass;
@@ -582,13 +650,12 @@ std::string administrator::login()
         {
             std::cout << "match found" << std::endl;
             std::cout << "user's id: " << admin.userId << std::endl;
-            id=admin.userId;
+            id = admin.userId;
             break;
         }
     }
     return id;
 }
-
 std::string bookingAgent::login()
 {
 
@@ -609,13 +676,12 @@ std::string bookingAgent::login()
         {
             std::cout << "match found" << std::endl;
             std::cout << "user's id: " << bookingAgent.userId << std::endl;
-            id= bookingAgent.userId;
+            id = bookingAgent.userId;
             break;
         }
     }
     return id;
 }
-
 std::string passenger::login()
 {
 
@@ -642,7 +708,6 @@ std::string passenger::login()
     }
     return id;
 }
-
 
 void AssignmentManager::crewAssignment(flight &flight_ref)
 {
@@ -702,7 +767,9 @@ void AssignmentManager::crewAssignment(flight &flight_ref)
     AssignmentManager::assign(*pilotIt, flight_ref);
     AssignmentManager::assign(*attendantIt, flight_ref);
 
-    std::cout << "Crew assigned successfully to Flight AA123." << std::endl;
+    Reporting::report("Assigned the crew members Pilot: "+(*pilotIt).name +" and Flight Attendant: "+(*attendantIt).name+" to flight of number "+flight_ref.flightNo);
+
+    std::cout << "Crew assigned successfully to Flight " <<flight_ref.flightNo<< std::endl;
 }
 
 // void  AssignmentManager::assign(std::shared_ptr<crewMember> cm, std::shared_ptr<flight> fl)

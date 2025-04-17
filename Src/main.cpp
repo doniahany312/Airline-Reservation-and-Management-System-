@@ -66,7 +66,10 @@ int main()
 		}
 		if (!id.empty() && id!="initialized")
 		{
+			Reporting::report(user_ptr->userType+" with ID: "+user_ptr->userId+" Logged in succesfully");
 			user_ptr->displayMenu();
+			Reporting::report(user_ptr->userType+" with ID: "+user_ptr->userId+" Logged out succesfully");
+
 		}
 		else if (id.empty())
 		{

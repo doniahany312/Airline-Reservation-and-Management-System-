@@ -41,14 +41,15 @@ class reservation
     int totalCost;
     payment paymentMethod;
     std::string status;//Confirmed Canceled 
-    reservation(std::shared_ptr<passenger> own,std::shared_ptr<flight> flight,payment x,std::string seat):owner(std::move(own)),reservedFlight(std::move(flight)),paymentMethod(x),seat(seat),id(resvId++){}
-    reservation(std::shared_ptr<passenger> own,std::shared_ptr<flight> flight,int id,payment x,std::string seat):owner(std::move(own)),reservedFlight(std::move(flight)),id(id){}
+    reservation(std::shared_ptr<passenger> own,std::shared_ptr<flight> flight,payment x,std::string seat):owner(std::move(own)),reservedFlight(std::move(flight)),paymentMethod(x),seat(seat),id(resvId++),status("Confirmed"){}
+    reservation(std::shared_ptr<passenger> own,std::shared_ptr<flight> flight,int id,payment x,std::string seat):owner(std::move(own)),reservedFlight(std::move(flight)),id(id),status("Confirmed"){}
 
 
-    static void add(std::shared_ptr<reservation> sptr);
-    static void Modify();
+    static std::string add(std::string passengerId);
     static void cancel(int reservationId);
     static reservation& getReservation(int reservationId);
+    static std::vector<reservation> getHistory(std::vector<int> ids);
+    static void Modify();
 
     //cancel 
 };
@@ -76,7 +77,15 @@ maintenance()
     schedules.push_back(std::make_pair("first maintenance", currentTime));
 }
 
-
 void addLog(const std::string& description);
+};
+
+class Reporting
+{
+ static  std::vector<std::string> reports;
+public:
+
+static void report(std::string entry);
+static void generateReport();
 };
 #endif

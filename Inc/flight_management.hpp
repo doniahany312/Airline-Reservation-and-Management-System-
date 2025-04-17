@@ -49,7 +49,7 @@ public:
     std::map<std::string, int> seatmap; //12A available or not (0 available 1 not available)
     int availableSeatsNo;
     int seatPrice;
-    flight() {initSeats();}
+    flight() {}
     flight(std::string number, std::string org, std::string dst, time_t x, time_t y, std::string status, std::shared_ptr<aircraft> craft) : flightNo(number), origin(org), destination(dst), departure(x), arrival(y), status(status), craft(craft) {initSeats();}
     void print() const;
 };
@@ -62,6 +62,7 @@ private:
     static void removeFlight();
     static void updateFlight();
     static void updateFlightDetails(flight &flight_ref);
+    static void changeStatus(flight& flight_ref);
 
 
 public:

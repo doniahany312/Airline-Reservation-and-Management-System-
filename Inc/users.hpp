@@ -66,6 +66,9 @@ class bookingAgent : public user
 private:
     bool processPayment(std::string accType, std::string acc, int amount); // needs a payment class
     static int bookingAgentId;
+    void bookFlight();
+    void modifyReservation();
+    void cancelReservation();
 
 public:
     static std::vector<bookingAgent> bookingAgents;
@@ -86,9 +89,6 @@ public:
         this->userId = "BA"+ std::to_string(bookingAgentId++);
     }
     // void searchFlights(); // couts all available flights
-    void bookFlight();
-    void modifyReservation();
-    void cancelReservation();
     void airportCheckin();
     static std::string login();
     void displayMenu() override;
@@ -101,14 +101,14 @@ static int passengerId;
     void bookFlight();
 public:
     static std::vector<passenger> passengers;
-    std::vector<std::string> history;
+    std::vector<int> history;//reservations ids
     std::string preferences;
     
     passenger(const std::string &username,const std::string&password,const std::string &name,const std::string& id)
     {
         this->username = username;
         this->password = password;
-        this->userType = "booking agent";
+        this->userType = "passenger";
         this->name = name;
         this->userId = id;
     }
@@ -116,7 +116,7 @@ public:
     {
         this->username = username;
         this->password = password;
-        this->userType = "booking agent";
+        this->userType = "passenger";
         this->name = name;
         this->userId = "P" + std::to_string(passengerId++);
     }

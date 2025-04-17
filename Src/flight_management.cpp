@@ -44,115 +44,115 @@ std::vector<flight> flightManagement::flights = {
         std::make_shared<aircraft>(aircraft::aircrafts[1]) // Aircraft
     }};
 
-void flightManagement::displayAdministratorMenu()
-{
-    int x;
-    bool wrongChoice = true;
-    while (wrongChoice)
+    void flightManagement::displayAdministratorMenu()
     {
-        std::cout << "--- Manage Flights ---" << std::endl
-                  << "1. Add New Flight" << std::endl
-                  << "2. Update Existing Flight" << std::endl
-                  << "3. Remove Flight" << std::endl
-                  << "4. View All Flights" << std::endl
-                  << "5. Back to Main Menu" << std::endl;
-
-        std::cin >> x;
-        switch (x)
+        int x;
+        bool wrongChoice = true;
+        while (wrongChoice)
         {
-        case 1: // add new flight
-            addFlight();
-            break;
-        case 2: // update existing flight
-            updateFlight();
-            break;
-        case 3: // remove flight
-            removeFlight();
-            break;
-        case 4: // view all flights
-            for (auto flight : flights)
+            std::cout << "--- Manage Flights ---" << std::endl
+                      << "1. Add New Flight" << std::endl
+                      << "2. Update Existing Flight" << std::endl
+                      << "3. Remove Flight" << std::endl
+                      << "4. View All Flights" << std::endl
+                      << "5. Back to Main Menu" << std::endl;
+    
+            std::cin >> x;
+            switch (x)
             {
-                flight.print();
+            case 1: // add new flight
+                addFlight();
+                break;
+            case 2: // update existing flight
+                updateFlight();
+                break;
+            case 3: // remove flight
+                removeFlight();
+                break;
+            case 4: // view all flights
+                for (auto flight : flights)
+                {
+                    flight.print();
+                }
+                break;
+            case 5:
+                wrongChoice = false;
+                return;
+            default:
+                std::cout << "Invalid choice! Please try again." << std::endl;
+                break;
             }
-            break;
-        case 5:
-            wrongChoice = false;
-            return;
-        default:
-            std::cout << "Invalid choice! Please try again." << std::endl;
-            break;
         }
     }
-}
 
-void flightManagement::addFlight()
-{
-    std::string aircraftType;
-    flight newFlight;
-    std::cin.ignore(); // Clear input buffer
-    std::cout << "Enter Flight Number: ";
-    std::getline(std::cin, newFlight.flightNo);
-    // checks for flight numebr
-    auto it = std::find_if(flights.begin(), flights.end(), [newFlight](const flight &f)
-                           { return f.flightNo == newFlight.flightNo; });
-    if (it != flights.end())
+    void flightManagement::addFlight()
     {
-        std::cout << "Error:Flight number already exists!!" << std::endl;
-        return;
+        std::string aircraftType,input;
+        flight newFlight;
+        std::cin.ignore(); // Clear input buffer
+        std::cout << "Enter Flight Number: ";
+        std::getline(std::cin, input);
+        // checks for flight numebr
+        auto it = std::find_if(flights.begin(), flights.end(), [input](const flight &f)
+                               { return f.flightNo == input; });
+        if (it != flights.end())
+        {
+            std::cout << "Error:Flight number already exists!!" << std::endl;
+            return;
+        }
+        // possible point for memory leak??!!
+        newFlight.flightNo=input;
+
+        std::cout << "Enter Origin: ";
+        std::getline(std::cin, newFlight.origin);
+    
+        std::cout << "Enter Destination: ";
+        std::getline(std::cin, newFlight.destination);
+    
+        std::cout << "Enter Departure Date and Time (YYYY-MM-DD HH:MM): ";
+        std::string departureStr;
+        std::getline(std::cin, departureStr);
+        std::istringstream departureStream(departureStr);
+        std::tm departureTm = {};
+        departureStream >> std::get_time(&departureTm, "%Y-%m-%d %H:%M");
+        if (departureStream.fail())
+        {
+            std::cerr << "Failed to parse departure date and time.\n";
+            return;
+        }
+        newFlight.departure = std::mktime(&departureTm);
+    
+        std::cout << "Enter Arrival Date and Time (YYYY-MM-DD HH:MM): ";
+        std::string arrivalStr;
+        std::getline(std::cin, arrivalStr);
+        std::istringstream arrivalStream(arrivalStr);
+        std::tm arrivalTm = {};
+        arrivalStream >> std::get_time(&arrivalTm, "%Y-%m-%d %H:%M");
+        if (arrivalStream.fail())
+        {
+            std::cerr << "Failed to parse arrival date and time.\n";
+            return;
+        }
+        newFlight.arrival = std::mktime(&arrivalTm);
+    
+        std::cout << "Enter Aircraft Type: ";
+        std::getline(std::cin, aircraftType);
+    
+        auto it2 = std::find_if(aircraft::aircrafts.begin(), aircraft::aircrafts.end(), [aircraftType](const aircraft &a)
+                                { return a.type == aircraftType; });
+        if (it2 == aircraft::aircrafts.end())
+        {
+            std::cout << "Failed to find an aircraft with this type" << std::endl;
+            return;
+        }
+        newFlight.craft = std::make_shared<aircraft>(*it2); // Using shared_ptr to manage aircraft
+    
+        std::cout << "Enter Status (Scheduled/Delayed/Canceled): ";
+        std::getline(std::cin, newFlight.status);
+    
+        flightManagement::flights.emplace_back(newFlight.flightNo,newFlight.origin,newFlight.destination,newFlight.departure,newFlight.arrival,newFlight.status,newFlight.craft);
+        std::cout << "Flight added successfully.\n";
     }
-    // possible point for memory leak??!!
-
-    std::cout << "Enter Origin: ";
-    std::getline(std::cin, newFlight.origin);
-
-    std::cout << "Enter Destination: ";
-    std::getline(std::cin, newFlight.destination);
-
-    std::cout << "Enter Departure Date and Time (YYYY-MM-DD HH:MM): ";
-    std::string departureStr;
-    std::getline(std::cin, departureStr);
-    std::istringstream departureStream(departureStr);
-    std::tm departureTm = {};
-    departureStream >> std::get_time(&departureTm, "%Y-%m-%d %H:%M");
-    if (departureStream.fail())
-    {
-        std::cerr << "Failed to parse departure date and time.\n";
-        return;
-    }
-    newFlight.departure = std::mktime(&departureTm);
-
-    std::cout << "Enter Arrival Date and Time (YYYY-MM-DD HH:MM): ";
-    std::string arrivalStr;
-    std::getline(std::cin, arrivalStr);
-    std::istringstream arrivalStream(arrivalStr);
-    std::tm arrivalTm = {};
-    arrivalStream >> std::get_time(&arrivalTm, "%Y-%m-%d %H:%M");
-    if (arrivalStream.fail())
-    {
-        std::cerr << "Failed to parse arrival date and time.\n";
-        return;
-    }
-    newFlight.arrival = std::mktime(&arrivalTm);
-
-    std::cout << "Enter Aircraft Type: ";
-    std::getline(std::cin, aircraftType);
-
-    auto it2 = std::find_if(aircraft::aircrafts.begin(), aircraft::aircrafts.end(), [aircraftType](const aircraft &a)
-                            { return a.type == aircraftType; });
-    if (it2 == aircraft::aircrafts.end())
-    {
-        std::cout << "Failed to find an aircraft with this type" << std::endl;
-        return;
-    }
-    newFlight.craft = std::make_shared<aircraft>(*it2); // Using shared_ptr to manage aircraft
-
-    std::cout << "Enter Status (Scheduled/Delayed/Canceled): ";
-    std::getline(std::cin, newFlight.status);
-
-    flightManagement::flights.push_back(newFlight);
-    std::cout << "Flight added successfully.\n";
-}
-
 void flightManagement::updateFlightDetails(flight &flight_ref)
 {
     std::string aircraftType;
@@ -178,6 +178,7 @@ void flightManagement::updateFlightDetails(flight &flight_ref)
         std::cout << "Enter Origin: ";
         std::getline(std::cin, flight_ref.origin);
         std::cout << "Origin updated! " << std::endl;
+        Reporting::report("Updated the origin of flight number: "+flight_ref.flightNo);
         break;
 
     case 2:
@@ -185,6 +186,8 @@ void flightManagement::updateFlightDetails(flight &flight_ref)
         std::cout << "Enter Destination: ";
         std::getline(std::cin, flight_ref.destination);
         std::cout << "Destination updated! " << std::endl;
+        Reporting::report("Updated the destination of flight number: "+flight_ref.flightNo);
+
         break;
 
     case 3:
@@ -201,6 +204,8 @@ void flightManagement::updateFlightDetails(flight &flight_ref)
         }
         flight_ref.departure = std::mktime(&departureTm);
         std::cout << "Departure date and time updated! " << std::endl;
+        Reporting::report("Updated the Departure date and time of flight number: "+flight_ref.flightNo);
+
         break;
 
     case 4:
@@ -217,6 +222,8 @@ void flightManagement::updateFlightDetails(flight &flight_ref)
         }
         flight_ref.arrival = std::mktime(&arrivalTm);
         std::cout << "Arrival date and time updated! " << std::endl;
+        Reporting::report("Updated the Arrival date and time of flight number: "+flight_ref.flightNo);
+
         break;
 
     case 5:
@@ -234,6 +241,8 @@ void flightManagement::updateFlightDetails(flight &flight_ref)
         flight_ref.craft = std::make_shared<aircraft>(*it2); // can be optimized?
 
         std::cout << "Aircraft updated! " << std::endl;
+        Reporting::report("Updated the Aircraft of flight number: "+flight_ref.flightNo);
+
         break;
 
     // default:
@@ -272,6 +281,7 @@ void flightManagement::updateFlight()
             AssignmentManager::crewAssignment(*it);
             break;
         case 3:
+            changeStatus(*it);
             break;
         case 4:
             return;
@@ -288,7 +298,19 @@ void flightManagement::updateFlight()
         std::cout << "Flight with Flight No " << flightNo << " not found." << std::endl;
     }
 }
-
+void flightManagement::changeStatus(flight& flight_ref)
+{
+   
+        std::string status;
+        std::cout<<"Enter new status (Confirmed-Scheduled-Canceled):";
+        std::getline(std::cin,status);
+        if(status=="Confirmed"||status=="Scheduled"||status=="Canceled")
+        {
+            flight_ref.status = status;
+            Reporting::report("Updated the status of flight number: "+flight_ref.flightNo + " to "+status);
+        }else{std::cout<<"Status entered is invalid"<<std::endl;return;}
+    
+}
 void flightManagement::removeFlight()
 {
 
@@ -306,6 +328,7 @@ void flightManagement::removeFlight()
     {
         flights.erase(it);
         std::cout << "Flight removed succesfully!" << std::endl;
+        Reporting::report("Flight of number: "+ flightNo +" removed ");
     }
     else
     {
@@ -354,7 +377,6 @@ void flightManagement::ManageAircraft()
 {
     int serviceChoice, size;
     std::string name;
-    std::cin.ignore();
     std::cout << "--- Aircraft Management ---" << std::endl
               << "1. Create " << std::endl
               << "2. Update " << std::endl
@@ -381,6 +403,8 @@ void flightManagement::ManageAircraft()
         std::cin >> size;
 
         aircraft::aircrafts.emplace_back(name, size, maintenance());
+        Reporting::report("Aircraft Added with type: "+aircraft::aircrafts.back().type);
+
         std::cout << "Aircraft Created Succesfully!!" << std::endl;
         break;
     case 2:
@@ -393,10 +417,12 @@ void flightManagement::ManageAircraft()
         std::cout << "Enter Updated Size:";
         std::cin >> size;
         it->seatsNo = size;
+        Reporting::report("Aircraft of type:"+(*it).type + "Updated with new size"+std::to_string((*it).seatsNo));
         std::cout << "Aircraft Updated Succesfully!!" << std::endl;
         break;
     case 3:
         aircraft::aircrafts.erase(it);
+        Reporting::report("Aircraft of type:"+(*it).type + "got deleted");
         std::cout << "Aircraft Deleted Sucessfully!!" << std::endl;
         break;
 

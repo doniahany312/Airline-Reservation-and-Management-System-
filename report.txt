@@ -1,0 +1,9 @@
+admin with ID: AD0 Logged in succesfully
+admin with ID: AD0 Logged out succesfully
+booking agent with ID: BA0 Logged in succesfully
+Booking agent with ID:BA0Booked flight: AA123 for Passenger with IDP456
+Booking agent with ID:BA0Booked flight: AA789 for Passenger with IDP456
+booking agent with ID: BA0 Logged out succesfully
+passenger with ID: P456 Logged in succesfully
+passenger with ID: P456 Logged out succesfully
+admin with ID: AD0 Logged in succesfully
