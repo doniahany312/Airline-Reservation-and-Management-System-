@@ -332,7 +332,7 @@ void passenger::displayMenu()
         {
         case 1:
             /* code */
-            std::cout << "REACHED HERE CORRECTLY" << std::endl;
+            // std::cout << "REACHED HERE CORRECTLY" << std::endl;
             flightManagement::searchFlights();
             bookFlight();
             break;
@@ -340,7 +340,7 @@ void passenger::displayMenu()
         viewHistory();
             break;
         case 3:
-            
+            onlineCheckin();
             break;
         case 4: // logout
             wrongChoice = false;
@@ -420,6 +420,61 @@ void passenger::viewHistory()
                  <<"   Status: "<<myReservations[count].status<<std::endl<<std::endl;
 
     }
+
+}
+void passenger::onlineCheckin()
+{ auto timeToString = [](time_t time) -> std::string
+    {
+        char buffer[20];
+        std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M", std::localtime(&time));
+        return std::string(buffer);
+    };
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+    std::cout<<std::endl<<"--- Online Check-In ---"<<std::endl;
+    std::cout<<"Enter Reservation ID: ";
+    std::string resvId;
+    std::getline(std::cin, resvId);
+    resvId.erase(0, 1); // Remove the first letter from the string
+    try
+    {
+        int reservationId = std::stoi(resvId); // Convert the remaining string to an integer
+        auto &reservation = reservation::getReservation(reservationId);
+        auto &flight = flightManagement::getFlight(reservation.reservedFlight.get()->flightNo);
+        if(reservation.status=="Confirmed")
+        {
+            reservation.status="Checked In";
+            Reporting::report("Passenger with ID: "+reservation.owner.get()->userId+" checked in for flight with number: "+flight.flightNo);
+            std::cout<<std::endl<<"Check-In Successful!"<<std::endl;
+            std::cout<<"Boarding Pass: "<<std::endl;
+            std::cout<<"-----------------------------"<<std::endl;
+            std::cout<<"Reservation ID: R"<<reservationId<<std::endl;
+            std::cout<<"Passenger: "<<reservation.owner.get()->name<<std::endl;
+            std::cout<<"Flight: "<<flight.flightNo<<std::endl;
+            std::cout<<"Origin: "<<flight.origin<<std::endl;
+            std::cout<<"Destination: "<<flight.destination<<std::endl;
+            std::cout<<"Departure: "<<timeToString(flight.departure)<<std::endl;
+            std::cout<<"Seat: "<<reservation.seat<<std::endl;
+            std::cout<<"Gate: "<<reservation.gate<<std::endl;
+            std::cout<<"Boarding Time: "<<timeToString(reservation.BoradingTime)<<std::endl;
+            std::cout<<"-----------------------------"<<std::endl<<std::endl;
+        }
+        else
+        {
+            std::cout<<"Check-In Failed! Reservation ID is not confirmed."<<std::endl;
+        }
+        
+    }
+    catch (const std::invalid_argument &e)
+    {
+        std::cerr << "Error: Invalid reservation ID format!" << std::endl;
+        return;
+    }
+    catch (const std::out_of_range &e)
+    {
+        std::cerr << "Error: Reservation ID is out of range!" << std::endl;
+        return;
+    }
+
 
 }
 void bookingAgent::displayMenu()

@@ -1,13 +1,50 @@
 // #include "../Inc/system.hpp"
 
 #include "../Inc/flight_management.hpp"
-#include <limits>
+#include <iostream>
 #include <algorithm>
+#include <limits>
 #include <fstream> // Include for file handling
-#include <iostream> // Include for error handling
 
-int reservation::resvId = 0;
+// Initialize static members
 std::unordered_map<int, std::shared_ptr<reservation>> reservation::reservations = {};
+std::unordered_map<std::string, std::string> reservation::flightToGateMap = {};
+std::vector<std::string> reservation::gates = {"B12", "A1", "C3", "D5", "E7"};
+int reservation::gateIndex = 0;
+int reservation::resvId = 0;
+
+// Define constructors
+reservation::reservation(std::shared_ptr<passenger> own, std::shared_ptr<flight> flight, payment x, std::string seat)
+    : owner(std::move(own)), reservedFlight(std::move(flight)), paymentMethod(x), seat(seat), id(resvId++), status("Confirmed") {
+    if (reservedFlight) {
+        BoradingTime = reservedFlight->departure - 2 * 60 * 60; // Subtract 2 hours from departure time
+
+        // Assign a gate based on the flight
+        const std::string& flightNo = reservedFlight->flightNo;
+        if (flightToGateMap.find(flightNo) == flightToGateMap.end()) {
+            // If the flight is not yet mapped to a gate, assign the next available gate
+            flightToGateMap[flightNo] = gates[gateIndex];
+            gateIndex = (gateIndex + 1) % gates.size(); // Cycle through the gates
+        }
+        gate = flightToGateMap[flightNo]; // Assign the gate for this flight
+    }
+}
+
+reservation::reservation(std::shared_ptr<passenger> own, std::shared_ptr<flight> flight, int id, payment x, std::string seat)
+    : owner(std::move(own)), reservedFlight(std::move(flight)), id(id), paymentMethod(x), seat(seat), status("Confirmed") {
+    if (reservedFlight) {
+        BoradingTime = reservedFlight->departure - 2 * 60 * 60; // Subtract 2 hours from departure time
+
+        // Assign a gate based on the flight
+        const std::string& flightNo = reservedFlight->flightNo;
+        if (flightToGateMap.find(flightNo) == flightToGateMap.end()) {
+            // If the flight is not yet mapped to a gate, assign the next available gate
+            flightToGateMap[flightNo] = gates[gateIndex];
+            gateIndex = (gateIndex + 1) % gates.size(); // Cycle through the gates
+        }
+        gate = flightToGateMap[flightNo]; // Assign the gate for this flight
+    }
+}
 
 std::string reservation::add(std::string passengerId)//std::shared_ptr<passenger> passengerPtr
 {

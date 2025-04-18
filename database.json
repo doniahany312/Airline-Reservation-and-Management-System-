@@ -7,9 +7,27 @@
             "username": "admin0"
         },
         {
+            "id": "AD0",
+            "name": "Admin Name",
+            "password": "b98469597c3b3a48",
+            "username": "admin0"
+        },
+        {
+            "id": "AD0",
+            "name": "Admin Name",
+            "password": "a7a408c6598578fa",
+            "username": "admin0"
+        },
+        {
+            "id": "AD0",
+            "name": "Admin Name",
+            "password": "cc8cfdaa8859c24f",
+            "username": "admin0"
+        },
+        {
             "id": "AD1",
             "name": "John Doe",
-            "password": "d3102553ee2d5210",
+            "password": "da4b0ec88b96d95b",
             "username": "admin1"
         }
     ],
@@ -33,9 +51,27 @@
             "username": "agent0"
         },
         {
+            "id": "BA0",
+            "name": "agentNo0",
+            "password": "b98469597c3b3a48",
+            "username": "agent0"
+        },
+        {
+            "id": "BA0",
+            "name": "agentNo0",
+            "password": "a7a408c6598578fa",
+            "username": "agent0"
+        },
+        {
+            "id": "BA0",
+            "name": "agentNo0",
+            "password": "cc8cfdaa8859c24f",
+            "username": "agent0"
+        },
+        {
             "id": "BA1",
             "name": "Jane Smith",
-            "password": "124c3fef7e2419a1",
+            "password": "d11b674a572a8ce2",
             "username": "agent1"
         }
     ],
@@ -66,6 +102,15 @@
             "flightNo": "AA124",
             "origin": "Chicago (ORD)",
             "status": "Schedule"
+        },
+        {
+            "aircraftType": "Airbus A320",
+            "arrival": "2023-12-20 12:30",
+            "departure": "2023-12-20 09:30",
+            "destination": "Miami (MIA)",
+            "flightNo": "AB123",
+            "origin": "New York (JFK)",
+            "status": "Scheduled"
         }
     ],
     "passengers": [
@@ -76,9 +121,27 @@
             "username": "passenger0"
         },
         {
+            "id": "P456",
+            "name": "PassengerNo0",
+            "password": "b98469597c3b3a48",
+            "username": "passenger0"
+        },
+        {
+            "id": "P456",
+            "name": "PassengerNo0",
+            "password": "a7a408c6598578fa",
+            "username": "passenger0"
+        },
+        {
+            "id": "P456",
+            "name": "PassengerNo0",
+            "password": "cc8cfdaa8859c24f",
+            "username": "passenger0"
+        },
+        {
             "id": "P1",
             "name": "Alice Brown",
-            "password": "0921c266d7f80f2d",
+            "password": "0ddfac5bbec94c24",
             "username": "passenger1"
         }
     ]

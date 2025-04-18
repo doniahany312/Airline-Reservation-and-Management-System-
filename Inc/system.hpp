@@ -31,6 +31,9 @@ class reservation
     private:
     static  std::unordered_map<int, std::shared_ptr<reservation>> reservations;
     static int resvId;
+    static std::unordered_map<std::string, std::string> flightToGateMap; // Map flightNo to gate
+    static std::vector<std::string> gates;                              // List of main gates
+    static int gateIndex;                                               // Index to assign gates sequentially
 
     public:
 
@@ -39,10 +42,15 @@ class reservation
     std::shared_ptr<flight> reservedFlight;
     std::string seat;
     int totalCost;
+    std::string gate;
+    time_t BoradingTime;
     payment paymentMethod;
     std::string status;//Confirmed Canceled 
-    reservation(std::shared_ptr<passenger> own,std::shared_ptr<flight> flight,payment x,std::string seat):owner(std::move(own)),reservedFlight(std::move(flight)),paymentMethod(x),seat(seat),id(resvId++),status("Confirmed"){}
-    reservation(std::shared_ptr<passenger> own,std::shared_ptr<flight> flight,int id,payment x,std::string seat):owner(std::move(own)),reservedFlight(std::move(flight)),id(id),status("Confirmed"){}
+  
+    // Declare constructors
+    reservation(std::shared_ptr<passenger> own, std::shared_ptr<flight> flight, payment x, std::string seat);
+    reservation(std::shared_ptr<passenger> own, std::shared_ptr<flight> flight, int id, payment x, std::string seat);
+
 
 
     static std::string add(std::string passengerId);
@@ -53,6 +61,7 @@ class reservation
 
     //cancel 
 };
+
 
 
 class maintenance
