@@ -4,8 +4,6 @@
 //this file will include
 // reservation ,Mainetnance ,payment,Reporting classes
 
-// #include"../Inc/users.hpp"
-// #include"../Inc/flight_management.hpp"
 #include <vector>
 #include <ctime>
 #include <iomanip>
@@ -57,7 +55,7 @@ class reservation
     static void cancel(int reservationId);
     static reservation& getReservation(int reservationId);
     static std::vector<reservation> getHistory(std::vector<int> ids);
-    static void Modify();
+    // static void Modify();
 
     //cancel 
 };
@@ -76,9 +74,6 @@ maintenance()
         std::time_t now = std::time(nullptr);
         now += 30 * 24 * 60 * 60; // Adding 30 days to the current time
         std::tm* localTime = std::localtime(&now);
-        // std::ostringstream oss;
-        // oss << std::put_time(localTime, "%Y-%m-%d %H:%M:%S");
-        // return oss.str();
         return localTime;
     };
 

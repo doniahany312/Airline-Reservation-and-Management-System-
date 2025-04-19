@@ -208,9 +208,7 @@ void flightManagement::updateFlightDetails(flight &flight_ref)
 
         break;
 
-    // default:
-    // std::cout << "Invalid choice! " << std::endl;
-    // return;
+
     }
 }
 

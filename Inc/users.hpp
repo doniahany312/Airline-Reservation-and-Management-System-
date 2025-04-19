@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
-// #include"../Inc/flight_management.hpp"
+
 class AssignmentManager;
 class flight;
 
@@ -22,7 +22,6 @@ public:
     std::string userType; // bookingAgent-Passenger-Administrator
     std::string getId() { return this->userId; }
     int getPhoneNumber() { return this->phoneNumber; }
-    // virtual static int login()=0;//if -1 then failed auth
     virtual void displayMenu() = 0;
     
 };
@@ -53,10 +52,9 @@ public:
         this->name = name;
         this->userId = "AD"+std::to_string(adminId++);
     }
-    // FLIGHT OPS*  make the crew assigment in the flight ops
-    //  void crewAssigment();//arguments are todo (flightid,crewid)
+
     void manageUsers();
-    void generateReports();
+    // void generateReports();
     static std::string login();
     void displayMenu() override;
 };

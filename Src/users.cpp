@@ -14,9 +14,9 @@ int administrator::adminId = 0;
 
 // Define static vectors
 // admin0 - 0000
-std::vector<administrator> administrator::admins = {administrator(std::string("admin0"), "cd1415b16f2e6c7d", std::string("Admin Name"))};
-std::vector<bookingAgent> bookingAgent::bookingAgents = {bookingAgent(std::string("agent0"), "cd1415b16f2e6c7d", std::string("agentNo0"))};
-std::vector<passenger> passenger::passengers = {passenger("passenger0", "cd1415b16f2e6c7d", "PassengerNo0", "P456")};
+std::vector<administrator> administrator::admins = {};
+std::vector<bookingAgent> bookingAgent::bookingAgents = {};
+std::vector<passenger> passenger::passengers = {};
 std::vector<pilot> pilot::pilots = {pilot("Sarah Connor", "PL001"), pilot("James Kirk", "PL002")};
 std::vector<flightAttendant> flightAttendant::flightAttendants = {flightAttendant("Emma Watson", "FA001"), flightAttendant("John Cena", "FA002")};
 void administrator::displayMenu()
@@ -355,7 +355,8 @@ void passenger::displayMenu()
 }
 void passenger::bookFlight()
 {
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+    //INTINTIAL REMOVAL OF CIN IGNORE
+    // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
 
     // std::shared_ptr<passenger> passengerPtr(&(*this), [](passenger*) {
     //     // Custom deleter does nothing
@@ -824,14 +825,14 @@ void AssignmentManager::assign(crewMember &cm, flight &fl)
 
 {
     cm.available = false;
-    for (auto p : pilot::pilots)
-    {
-        std::cout << "Pilot ID: " << p.crewID << " Av: " << p.available << std::endl;
-    }
-    for (auto p : flightAttendant::flightAttendants)
-    {
-        std::cout << "Flight Attendant ID: " << p.crewID << " Av: " << p.available << std::endl;
-    }
+    // for (auto p : pilot::pilots)
+    // {
+    //     std::cout << "Pilot ID: " << p.crewID << " Av: " << p.available << std::endl;
+    // }
+    // for (auto p : flightAttendant::flightAttendants)
+    // {
+    //     std::cout << "Flight Attendant ID: " << p.crewID << " Av: " << p.available << std::endl;
+    // }
 
     assignments.emplace_back(std::make_shared<flight>(fl), std::make_shared<crewMember>(cm));
 }

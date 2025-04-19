@@ -7,27 +7,9 @@
             "username": "admin0"
         },
         {
-            "id": "AD0",
-            "name": "Admin Name",
-            "password": "b98469597c3b3a48",
-            "username": "admin0"
-        },
-        {
-            "id": "AD0",
-            "name": "Admin Name",
-            "password": "a7a408c6598578fa",
-            "username": "admin0"
-        },
-        {
-            "id": "AD0",
-            "name": "Admin Name",
-            "password": "cc8cfdaa8859c24f",
-            "username": "admin0"
-        },
-        {
             "id": "AD1",
             "name": "John Doe",
-            "password": "da4b0ec88b96d95b",
+            "password": "9f84b9abc7e8faa9",
             "username": "admin1"
         }
     ],
@@ -51,27 +33,9 @@
             "username": "agent0"
         },
         {
-            "id": "BA0",
-            "name": "agentNo0",
-            "password": "b98469597c3b3a48",
-            "username": "agent0"
-        },
-        {
-            "id": "BA0",
-            "name": "agentNo0",
-            "password": "a7a408c6598578fa",
-            "username": "agent0"
-        },
-        {
-            "id": "BA0",
-            "name": "agentNo0",
-            "password": "cc8cfdaa8859c24f",
-            "username": "agent0"
-        },
-        {
             "id": "BA1",
             "name": "Jane Smith",
-            "password": "d11b674a572a8ce2",
+            "password": "0e488d8e65c27395",
             "username": "agent1"
         }
     ],
@@ -111,6 +75,15 @@
             "flightNo": "AB123",
             "origin": "New York (JFK)",
             "status": "Scheduled"
+        },
+        {
+            "aircraftType": "Boeing 737",
+            "arrival": "2023-12-15 11:45",
+            "departure": "2023-12-15 08:30",
+            "destination": "New York (JFK)",
+            "flightNo": "AC123",
+            "origin": "Cairo (CAI)",
+            "status": "Scheduled"
         }
     ],
     "passengers": [
@@ -121,27 +94,9 @@
             "username": "passenger0"
         },
         {
-            "id": "P456",
-            "name": "PassengerNo0",
-            "password": "b98469597c3b3a48",
-            "username": "passenger0"
-        },
-        {
-            "id": "P456",
-            "name": "PassengerNo0",
-            "password": "a7a408c6598578fa",
-            "username": "passenger0"
-        },
-        {
-            "id": "P456",
-            "name": "PassengerNo0",
-            "password": "cc8cfdaa8859c24f",
-            "username": "passenger0"
-        },
-        {
             "id": "P1",
             "name": "Alice Brown",
-            "password": "0ddfac5bbec94c24",
+            "password": "528680aed0e34834",
             "username": "passenger1"
         }
     ]

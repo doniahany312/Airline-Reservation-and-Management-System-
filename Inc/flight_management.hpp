@@ -13,10 +13,9 @@
 #include <map>
 #include <memory>
 #include<unordered_set>
-class crewMember;
+
 class flightManagement;
 class flight; 
-class maintenance;
 class Database;
 
 class aircraft
@@ -27,8 +26,6 @@ private:
 public:
     std::string type;
     int seatsNo;//Should be divisble by 4
-    // aircraft management
-    // mainentance schedule?
     maintenance aircraftMaintenance;
     bool availability;
     aircraft(std::string type, int no, maintenance m) : type(type), seatsNo(no), aircraftMaintenance(m), availability(true) {}
@@ -36,7 +33,6 @@ public:
     aircraft(const std::string& type, int seatsNo, const maintenance& m, bool availability)
         : type(type), seatsNo(seatsNo), aircraftMaintenance(m), availability(availability) {}
 
-    // availability? should it be vector of time stamps from-to?
     friend flightManagement;
     friend Database;
 };
@@ -74,8 +70,6 @@ private:
 
 public:
     static std::vector<flight> searchFlights();
-    // void addFlight(const flight& added)
-    // {flights.push_back(added);}//will be in cpp file
     static flight& getFlight(const std::string& flightNo);
     static std::unordered_set<std::string> getAvailableSeats(const std::string &flightNo);
     static void displayAdministratorMenu();
@@ -86,13 +80,3 @@ public:
 
 
 #endif // FLIGHT_MANAGEMENT_HPP
-
-// class CrewAssignment {
-//     public:
-//         crewMember* crew_ptr;
-//         flight* flight_ptr;
-//         // std::string role; // Pilot, Co-Pilot, Attendant
-
-//         CrewAssignment(crewMember* cm, flight * fl)
-//             : crew_ptr(cm), flight_ptr(fl) {}
-//     };

@@ -1,13 +1,16 @@
-admin with ID: AD1 Logged in succesfully
-Aircraft of type:Boeing 737Updated with new size200
-admin with ID: AD1 Logged out succesfully
+admin with ID: AD0 Logged in succesfully
+admin with ID: AD0 Logged out succesfully
 booking agent with ID: BA0 Logged in succesfully
-Booking agent with ID:BA0Booked flight: AA124 for Passenger with IDP1
-Booking agent modified Reservation with ID: R0 to be of seat:13C
-Booking agent with ID:BA0Booked flight: AA124 for Passenger with IDP456
+Booking agent with ID: BA0 Booked flight: AA123 for Passenger with ID: P456
 booking agent with ID: BA0 Logged out succesfully
-passenger with ID: P1 Logged in succesfully
-passenger with ID: P1 Logged out succesfully
+passenger with ID: P456 Logged in succesfully
+Passenger with ID: P456 reserved flight with number: AA123
+Passenger with ID: P456 checked in for flight with number: AA123
+passenger with ID: P456 Logged out succesfully
+booking agent with ID: BA0 Logged in succesfully
+Booking agent canceled reservation with ID: R0
+booking agent with ID: BA0 Logged out succesfully
 passenger with ID: P456 Logged in succesfully
 passenger with ID: P456 Logged out succesfully
 admin with ID: AD0 Logged in succesfully
+Assigned the crew members Pilot: Sarah Connor and Flight Attendant: John Cena to flight of number AA123
